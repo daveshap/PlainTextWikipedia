@@ -1,5 +1,6 @@
 # PlainTextWikipedia
-Convert Wikipedia database dumps into plaintext files
+
+Convert Wikipedia database dumps into plain text files (JSON). 
 
 ## Instructions
 
@@ -22,3 +23,11 @@ Each file is a JSON object with the root element as a list. Each dictionary with
  }
 ]
 ```
+
+## Legal
+
+https://en.wikipedia.org/wiki/Wikipedia:Reusing_Wikipedia_content
+
+Wikipedia is published under [Creative Commons Attribution Share-Alike license (CC-BY-SA)](https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License). 
+
+My script is published under the MIT license but this does not confer the same privileges to the material you convert with it. 
