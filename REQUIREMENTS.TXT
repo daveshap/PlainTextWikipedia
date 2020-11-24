@@ -1,5 +1,4 @@
 uuid
-ast
 html2text
 wikitextparser
 json
