@@ -1,6 +1,6 @@
 # PlainTextWikipedia
 
-Convert Wikipedia database dumps into plain text files (JSON). 
+Convert Wikipedia database dumps into plain text files (JSON). This can parse literally all of Wikipedia with pretty high fidelity. 
 
 ## Instructions
 
