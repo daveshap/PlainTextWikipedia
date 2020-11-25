@@ -31,3 +31,9 @@ https://en.wikipedia.org/wiki/Wikipedia:Reusing_Wikipedia_content
 Wikipedia is published under [Creative Commons Attribution Share-Alike license (CC-BY-SA)](https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License). 
 
 My script is published under the MIT license but this does not confer the same privileges to the material you convert with it. 
+
+## Future Improvements
+
+1. Maintain some article structure in JSON format
+2. Better demarkup handling
+3. Better retention of link and image context
