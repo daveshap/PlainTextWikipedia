@@ -6,7 +6,9 @@ Convert Wikipedia database dumps into plain text files (JSON). This can parse li
 
 1. Download all the .bz2 files from a dump: https://dumps.wikimedia.org/enwiki/ The filename should look like `enwiki-20201120-pages-articles-multistream1.xml-p1p41242.bz2`
 2. Unzip all bz2 files directly to another directory, such as `WikipediaArchive`
-3. Run the script `jsonify_wikipedia.py` (update the directories within and install prerequisites first)
+3. Install `REQUIREMENTS.TXT`
+4. Update the source and destination directory variables in `jsonify_wikipedia.py`
+5. Run the script `jsonify_wikipedia.py` 
 
 This will deposit a ~40MB JSON files into the destination folder. Each filename is guaranteed to be completely unique as it is based on UUIDv4. 
 
