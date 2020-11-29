@@ -1,6 +1,3 @@
 uuid
 html2text
 wikitextparser
-json
-re
-os
