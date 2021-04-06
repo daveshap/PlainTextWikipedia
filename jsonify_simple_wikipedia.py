@@ -5,7 +5,6 @@ from uuid import uuid4
 import gc
 from html2text import html2text as htt
 import wikitextparser as wtp
-import sqlite3
 
 
 chars_per_file = 40 * 1000 * 1000  # create a consistently sized chunk (40MB each)
@@ -145,26 +144,11 @@ def analyze_chunk(text):
 
 
 
-def start_db(connection, cursor):
-    cursor.execute('CREATE TABLE IF NOT EXISTS wiki (title text, article text, id integer UNIQUE)')
-    cursor.execute('CREATE INDEX IF NOT EXISTS title_idx ON wiki(title)')
-    #cursor.execute('CREATE INDEX IF NOT EXISTS article_idx ON wiki(article)')
-    connection.commit()
-
-
-def save_to_db(doc, connection, cursor):
-    value = (doc['title'], doc['text'], doc['id'])
-    result = cursoer.execute('INSERT OR IGNORE INTO wiki VALUES (?,?,?)', value)
-    connection.commit()
-
-
 if __name__ == '__main__':
     simple_wiki_fn = 'F:/simplewiki-20210401/test2.xml'
     outdata = list()
     article = ''
-    dbcon = sqlite3.connect('simple_wiki.sqlite')
-    dbcur = dbcon.cursor()
-    start_db(dbcon, dbcur)
+    total_len = 0
     with open(simple_wiki_fn, 'r', encoding='utf-8') as infile:
         for line in infile:
             #print(line)
@@ -173,6 +157,12 @@ if __name__ == '__main__':
             elif '</page>' in line:  # end of article
                 doc = analyze_chunk(article)
                 if doc:
-                    save_to_db(doc, dbcon, dbcur)
+                    outdata.append(doc)
+                    total_len += len(doc['text'])
+                    if total_len >= chars_per_file:
+                        save_data(outdata)
+                        outdata = list()
+                        total_len = 0
             else:
                 article += line
+        save_data(outdata)
