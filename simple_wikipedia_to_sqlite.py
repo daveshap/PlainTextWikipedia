@@ -154,12 +154,12 @@ def start_db(connection, cursor):
 
 def save_to_db(doc, connection, cursor):
     value = (doc['title'], doc['text'], doc['id'])
-    result = cursoer.execute('INSERT OR IGNORE INTO wiki VALUES (?,?,?)', value)
+    result = cursor.execute('INSERT OR IGNORE INTO wiki VALUES (?,?,?)', value)
     connection.commit()
 
 
 if __name__ == '__main__':
-    simple_wiki_fn = 'F:/simplewiki-20210401/test2.xml'
+    simple_wiki_fn = 'F:/simplewiki-20210401/simplewiki-20210401.xml'
     outdata = list()
     article = ''
     dbcon = sqlite3.connect('simple_wiki.sqlite')
@@ -173,6 +173,7 @@ if __name__ == '__main__':
             elif '</page>' in line:  # end of article
                 doc = analyze_chunk(article)
                 if doc:
-                    save_to_db(doc, dbcon, dbcur)
+                    print('SAVING:', doc['title'])
+                    save_to_db(doc, dbcon, dbcur)                    
             else:
                 article += line
