@@ -37,9 +37,29 @@ def remove_double_brackets(text):
             return text    
 
 
+def remove_ref_tags(text):
+    while True:
+        before = len(text)
+        text = re.sub('&lt;ref((?!&lt;/ref).)*&lt;/ref&gt;', '', text) 
+        after = len(text)
+        if before == after:
+            return text
+
+
+def remove_headings(text):
+    while True:
+        before = len(text)
+        text = re.sub('==(.)*==', '', text) 
+        after = len(text)
+        if before == after:
+            return text
+
+
 def dewiki(text):
     text = remove_double_curly(text)
     text = remove_double_brackets(text)
+    text = remove_ref_tags(text)
+    text = remove_headings(text)
     text = wtp.parse(text).plain_text()
     text = htt(text)
     text = text.replace('\\n',' ')
@@ -57,7 +77,7 @@ def analyze_chunk(text):
             title = text.split('<title>')[1].split('</title>')[0]
             if ':' in title:  # this is a talk, category, or other (not a real article)
                 return None
-            title = htt(title)
+            title = htt(title).strip()
         serial = text.split('<id>')[1].split('</id>')[0]
         content = text.split('</text')[0].split('<text')[1].split('>', maxsplit=1)[1]
         content = dewiki(content)
