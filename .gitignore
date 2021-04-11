@@ -1,1 +1,3 @@
 simple_wiki.sqlite
+*.sqlite
+__pycache__/
