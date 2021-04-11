@@ -134,6 +134,7 @@ def process_file_solr(filename):
             elif '</page>' in line:  # end of article
                 doc = analyze_chunk(article)
                 if doc:
+                    print(doc['title'])
                     solr_index(doc)
             else:
                 article += line
