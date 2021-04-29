@@ -88,6 +88,11 @@ def remove_urls(text):
     return text
 
 
+def remove_wikitables(text):
+    text = re.sub('''\{\|.*?wikitable.*?\|\}''', ' ', text)
+    return text
+
+
 def dewiki(text):
     text = remove_simple_links(text)
     text = remove_pictures(text)
@@ -98,7 +103,7 @@ def dewiki(text):
     text = remove_categories(text)
     text = remove_all_links(text)
     text = remove_urls(text)
-    # TODO handle class=\"sortable wikitable\" and class=\"wikitable\"
+    text = remove_wikitables(text)  # TODO preserve this data somehow
     
     text = wtp.parse(text).plain_text()  # wiki to plaintext whatever is left
     text = htt(text)  # de-HTML text
@@ -113,9 +118,13 @@ def analyze_chunk(text):
     try:
         if '<redirect title="' in text:  # this is not the main article
             return None
+        if '(disambiguation)' in text:  # this is not an article
+            return None
         else:
             title = text.split('<title>')[1].split('</title>')[0]
             title = htt(title)
+            if ':' in title:  # most articles with : in them are not articles we care about
+                return None
         serial = text.split('<id>')[1].split('</id>')[0]
         content = text.split('</text')[0].split('<text')[1].split('>', maxsplit=1)[1]
         content = dewiki(content)
@@ -127,8 +136,18 @@ def analyze_chunk(text):
 
 def process_file_solr(filename):
     article = ''
+    with open('lastline.txt', 'r') as infile:
+        lineno = int(infile.read())
+    currline = 0
     with open(filename, 'r', encoding='utf-8') as infile:
         for line in infile:
+            currline += 1
+            if lineno > currline:
+                continue
+            else:
+                lineno = currline
+                with open('lastline.txt', 'w') as outfile:
+                    outfile.write(str(lineno))
             if '<page>' in line:
                 article = ''
             elif '</page>' in line:  # end of article
