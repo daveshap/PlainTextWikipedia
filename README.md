@@ -2,6 +2,7 @@
 
 Convert Wikipedia database dumps into plain text files (JSON). This can parse literally all of Wikipedia with pretty high fidelity. There's a copy available on [Kaggle Datasets](https://www.kaggle.com/ltcmdrdata/plain-text-wikipedia-202011)
 
+
 ## QUICK START
 
 1. Download and unzip a Wikipedia dump (see Data Sources below) make sure you get a monolithic XML file
@@ -24,6 +25,7 @@ Navigate into the latest dump. You're likley looking for the very first file in 
 - `simplewiki-20210401-pages-articles-multistream.xml.bz2 203.5 MB`
 
 Download and extract these to a storage directory. I usually shorten the folder name and filename. 
+
 
 ## Legal
 
