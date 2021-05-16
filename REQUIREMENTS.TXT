@@ -1,3 +1,2 @@
-uuid
 html2text
 wikitextparser

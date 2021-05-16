@@ -1,1 +1,0 @@
-docker run -d -v "C:/solrdata:/var/solr" -p 8983:8983 --name wiki solr:8 solr-precreate wiki
