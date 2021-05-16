@@ -4,4 +4,4 @@ from dewiki_functions import *
 filename = 'G:/enwiki-20210401/enwiki-20210401.xml'  # update this
 
 if __name__ == '__main__':
-    process_file_solr(filename)
+    process_file_text(filename, 'G:/wiki_plaintext/')

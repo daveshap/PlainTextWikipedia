@@ -1,3 +1,5 @@
+from threading import Thread
+import json
 import re
 from html2text import html2text as htt
 import wikitextparser as wtp
@@ -79,6 +81,9 @@ def remove_references(text):
     text = re.sub('==\s*References\s*==.*', ' ', text)
     text = re.sub('==\s*Notes\s*==.*', ' ', text)
     text = re.sub('==\s*Related pages\s*==.*', ' ', text)
+    text = re.sub('==\s*Related Pages\s*==.*', ' ', text)
+    text = re.sub('==\s*See Also\s*==.*', ' ', text)
+    text = re.sub('==\s*External Links\s*==.*', ' ', text)
     return text
 
 
@@ -94,16 +99,16 @@ def remove_wikitables(text):
 
 
 def dewiki(text):
-    text = remove_simple_links(text)
-    text = remove_pictures(text)
-    text = remove_audio(text)
-    text = remove_compound_links(text)
-    text = remove_references(text)
-    text = remove_citations(text)
-    text = remove_categories(text)
-    text = remove_all_links(text)
-    text = remove_urls(text)
-    text = remove_wikitables(text)  # TODO preserve this data somehow
+    #text = remove_simple_links(text)
+    #text = remove_pictures(text)
+    #text = remove_audio(text)
+    #text = remove_compound_links(text)
+    #text = remove_references(text)
+    #text = remove_citations(text)
+    #text = remove_categories(text)
+    #text = remove_all_links(text)
+    #text = remove_urls(text)
+    #text = remove_wikitables(text)  # TODO preserve this data somehow
     
     text = wtp.parse(text).plain_text()  # wiki to plaintext whatever is left
     text = htt(text)  # de-HTML text
@@ -136,8 +141,14 @@ def analyze_chunk(text):
 
 def process_file_solr(filename):
     article = ''
-    with open('lastline.txt', 'r') as infile:
-        lineno = int(infile.read())
+    try:
+        with open('lastline.txt', 'r') as infile:
+            lineno = int(infile.read())
+    except:
+        with open('lastline.txt', 'w') as outfile:
+            outfile.write(str(0))
+        lineno = 0
+    print('LAST LINE:', lineno)
     currline = 0
     with open(filename, 'r', encoding='utf-8') as infile:
         for line in infile:
@@ -157,3 +168,32 @@ def process_file_solr(filename):
                     solr_index(doc)
             else:
                 article += line
+
+
+def process_save_article(article, savedir):
+    doc = analyze_chunk(article)
+    if doc:
+        print('SAVING:', doc['title'])
+        filename = doc['id'] + '.json'
+        with open(savedir + filename, 'w', encoding='utf-8') as outfile:
+            json.dump(doc, outfile, sort_keys=True, indent=1, ensure_ascii=False)
+    
+
+
+def process_file_text(filename, savedir):
+    article = ''
+    with open(filename, 'r', encoding='utf-8') as infile:
+        for line in infile:
+            if '<page>' in line:
+                article = ''
+            elif '</page>' in line:  # end of article
+                #process_save_article(article, savedir)
+                Thread(target=process_save_article, args=(article, savedir)).start()
+                #doc = analyze_chunk(article)
+                #if doc:
+                #    print('SAVING:', doc['title'])
+                #    filename = doc['id'] + '.json'
+                #    with open(savedir + filename, 'w', encoding='utf-8') as outfile:
+                #        json.dump(doc, outfile, sort_keys=True, indent=1, ensure_ascii=False)
+            else:
+                article += line                

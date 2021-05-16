@@ -19,3 +19,21 @@ def solr_index(payload, core='wiki'):
         except Exception as oops:
             print(oops)
             sleep(1)
+
+
+
+def solr_search(query, core='wiki'):
+    headers = {'Content-Type':'application/json'}
+    solr_api = 'http://localhost:8983/solr/%s/query?fl=title,text' % core
+    count = 0
+    payload = {'query': query}
+    while True:
+        count += 1
+        if count > 6:
+            return None
+        try:
+            resp = requests.request(method='GET', url=solr_api, json=payload, headers=headers)
+            return resp
+        except Exception as oops:
+            print(oops)
+            sleep(1)
