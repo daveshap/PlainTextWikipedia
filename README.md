@@ -2,6 +2,13 @@
 
 Convert Wikipedia database dumps into plain text files (JSON). This can parse literally all of Wikipedia with pretty high fidelity. There's a copy available on [Kaggle Datasets](https://www.kaggle.com/ltcmdrdata/plain-text-wikipedia-202011)
 
+## QUICK START
+
+1. Download and unzip a Wikipedia dump (see Data Sources below) make sure you get a monolithic XML file
+2. Open up `wiki_to_text.py` and edit the filename to point at your XML file. Also update the savedir location
+3. Run `wiki_to_text.py` - it should take about 2.5 days to run, with some variation based on your CPU and storage speed
+
+
 ## Key Files in this Repo
 
 | Filename | Description |
